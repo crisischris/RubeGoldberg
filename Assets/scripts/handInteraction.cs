@@ -15,7 +15,8 @@ public class handInteraction : MonoBehaviour {
     public float posYatThrow;
     public float posZatThrow;
 
-    public bool isGrabbing = false;
+    public bool isGrabbingBall = false;
+    
 
     // Use this for initialization
     void Start () {
@@ -41,15 +42,15 @@ public class handInteraction : MonoBehaviour {
             }
             else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
             {
-                GrabObject(col);              
+                GrabObjectBall(col);              
                 controllerModel.SetActive(false);
             }           
         }
-        if (col.gameObject.CompareTag("Interactive"))
+        if (col.gameObject.CompareTag("Structure"))
         {
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
             {
-                dropObject(col);
+                dropObjectInteractive(col);
                 controllerModel.SetActive(true);
             }
             else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
@@ -65,18 +66,32 @@ public class handInteraction : MonoBehaviour {
 
    
 
-     void GrabObject(Collider col)
+     void GrabObjectBall(Collider col)
     {
        
         col.transform.SetParent(gameObject.transform);
         col.GetComponent<Rigidbody>().isKinematic = true;
         device.TriggerHapticPulse(pulesStregnth);
-        isGrabbing = true;
+        isGrabbingBall = true;
 
 
         // Debug.Log("you are touching down the trigger on an object");
 
     }
+
+    void GrabObject(Collider col)
+    {
+
+        col.transform.SetParent(gameObject.transform);
+        col.GetComponent<Rigidbody>().isKinematic = true;
+        device.TriggerHapticPulse(pulesStregnth);
+
+
+        // Debug.Log("you are touching down the trigger on an object");
+
+    }
+
+
 
     void ThrowObject(Collider col)
     {       
@@ -86,7 +101,7 @@ public class handInteraction : MonoBehaviour {
         rigidBody.isKinematic = false;
         rigidBody.velocity = device.velocity * throwForce;
         rigidBody.angularVelocity = device.angularVelocity;
-        isGrabbing = false;
+        isGrabbingBall = false;
 
 
 
@@ -103,7 +118,17 @@ public class handInteraction : MonoBehaviour {
         rigidBody.isKinematic = false;
         rigidBody.velocity = device.velocity * .9f;
         rigidBody.angularVelocity = device.angularVelocity;
-        isGrabbing = false;
+        isGrabbingBall = false;
+        // Debug.Log("you have dropped the object");
+
+    }
+
+    void dropObjectInteractive(Collider col)
+    {
+        col.transform.SetParent(null);
+        Rigidbody rigidBody = col.GetComponent<Rigidbody>();
+        rigidBody.isKinematic = true;
+        isGrabbingBall = false;
         // Debug.Log("you have dropped the object");
 
     }

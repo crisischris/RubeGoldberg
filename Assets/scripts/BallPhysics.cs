@@ -6,11 +6,14 @@ public class BallPhysics : MonoBehaviour {
 
     public handInteraction handinteractionL;
     public handInteraction handinteractionR;
+    public Teleporter teleporter;
+
+ 
+    private Rigidbody rigidbody2;
 
     public GameObject controllerL;
     public GameObject controllerR;
 
-    private float bounceForce = 2f;
     private LayerMask Interactive;
 
     public float initXPos;
@@ -26,6 +29,9 @@ public class BallPhysics : MonoBehaviour {
     public Material mat1;
     public Material mat2;
 
+    private float curveWidth = .1f;
+
+  
 
 
 
@@ -35,6 +41,7 @@ public class BallPhysics : MonoBehaviour {
         initXPos = gameObject.transform.position.x;
         initYPos = gameObject.transform.position.y;
         initZPos = gameObject.transform.position.z;
+        rigidbody2 = GetComponent<Rigidbody>();
 
 
     }
@@ -42,9 +49,13 @@ public class BallPhysics : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
+        //turn on trail
+
+        
+
 
         //check Left controller grabbing status
-        if (handinteractionL.isGrabbing == true)
+        if (handinteractionL.isGrabbingBall == true)
           { 
             if(controllerL.transform.position.x < 1 && controllerL.transform.position.x > -1
             && controllerL.transform.position.z < 1 && controllerL.transform.position.z > -1)
@@ -56,7 +67,7 @@ public class BallPhysics : MonoBehaviour {
             }                         
         }
 
-        if (handinteractionL.isGrabbing == true)
+        if (handinteractionL.isGrabbingBall == true)
         {
             if(controllerL.transform.position.x > 1 || controllerL.transform.position.x < -1
              || controllerL.transform.position.z > 1 || controllerL.transform.position.z < -1)
@@ -69,7 +80,7 @@ public class BallPhysics : MonoBehaviour {
         }
 
         //check Left controller grabbing status
-        if (handinteractionR.isGrabbing == true)
+        if (handinteractionR.isGrabbingBall == true)
         {
             if (controllerR.transform.position.x < 1 && controllerR.transform.position.x > -1
             && controllerR.transform.position.z < 1 && controllerR.transform.position.z > -1)
@@ -81,7 +92,7 @@ public class BallPhysics : MonoBehaviour {
             }
         }
 
-        if (handinteractionR.isGrabbing == true)
+        if (handinteractionR.isGrabbingBall == true)
         {
             if (controllerR.transform.position.x > 1 || controllerR.transform.position.x < -1
              || controllerR.transform.position.z > 1 || controllerR.transform.position.z < -1)
@@ -99,27 +110,33 @@ public class BallPhysics : MonoBehaviour {
         //reset ball position
         if (col.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("ball hit the ground");         
+            Debug.Log("ball hit the ground");
+            Destroy(GetComponent<TrailRenderer>());
             gameObject.transform.position = new Vector3(initXPos, initYPos, initZPos);
             Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
             rigidBody.velocity = rigidBody.velocity * 0;
-            rigidBody.angularVelocity = rigidBody.angularVelocity*0;
+            rigidBody.angularVelocity = rigidBody.angularVelocity * 0;
             GetComponent<Renderer>().material = mat2;
             GetComponent<Rigidbody>().mass = 1;
             GetComponent<Rigidbody>().drag = 0;
 
+
         }
 
-        //bounce ball 
-        if (col.gameObject.CompareTag("Bouncer"))
+        if (col.gameObject.CompareTag("Structure"))
         {
-            col.transform.SetParent(null);
-            Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
-            rigidBody.velocity = rigidBody.velocity * bounceForce;
-            rigidBody.angularVelocity = rigidBody.angularVelocity;
-       //     Debug.Log("you have released the trigger");
+
+            gameObject.AddComponent<TrailRenderer>();
+            TrailRenderer trail = GetComponent<TrailRenderer>();
+            trail.startWidth = curveWidth;
+            trail.time = 4;
+            trail.startColor = Color.red;
+
+
+            
 
         }
-    }
+    }     
+        
 
 }

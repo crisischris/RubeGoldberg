@@ -9,7 +9,6 @@ public class BallPhysics : MonoBehaviour {
     public Teleporter teleporter;
 
  
-    private Rigidbody rigidbody2;
 
     public GameObject controllerL;
     public GameObject controllerR;
@@ -29,7 +28,7 @@ public class BallPhysics : MonoBehaviour {
     public Material mat1;
     public Material mat2;
 
-    private float curveWidth = .1f;
+    private float curveWidth = .05f;
 
   
 
@@ -41,7 +40,6 @@ public class BallPhysics : MonoBehaviour {
         initXPos = gameObject.transform.position.x;
         initYPos = gameObject.transform.position.y;
         initZPos = gameObject.transform.position.z;
-        rigidbody2 = GetComponent<Rigidbody>();
 
 
     }
@@ -129,13 +127,25 @@ public class BallPhysics : MonoBehaviour {
             gameObject.AddComponent<TrailRenderer>();
             TrailRenderer trail = GetComponent<TrailRenderer>();
             trail.startWidth = curveWidth;
-            trail.time = 4;
-            trail.startColor = Color.red;
-
-
-            
+            trail.time = 2;
+            trail.receiveShadows = false;
+            trail.material.SetColor("_TintColor", Color.red);
 
         }
+
+        /*
+           if (col.gameObject.CompareTag("Interactive"))
+        {
+
+            gameObject.AddComponent<TrailRenderer>();
+            TrailRenderer trail = GetComponent<TrailRenderer>();
+            trail.startWidth = curveWidth;
+            trail.time = 2;
+            trail.receiveShadows = false;
+            trail.material.SetColor("_TintColor", Color.red);
+
+        }
+        */
     }     
         
 

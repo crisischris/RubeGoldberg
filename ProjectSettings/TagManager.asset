@@ -13,6 +13,8 @@ TagManager:
   - Bouncer
   - Teleporter
   - Structure
+  - Deleter
+  - Portal
   layers:
   - Default
   - TransparentFX

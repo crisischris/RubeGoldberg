@@ -32,10 +32,10 @@ public class Trampoline : MonoBehaviour
         {
             col.transform.SetParent(null);
             Rigidbody rigidBody = ball.GetComponent<Rigidbody>();
-            rigidBody.velocity = rigidBody.velocity * bounceForce;
+            rigidBody.velocity = rigidBody.velocity * (bounceForce+.25f);
             rigidBody.angularVelocity = rigidBody.angularVelocity;
             Debug.Log("Bouncy Bouncy");
-
+                
         }
     }
 }

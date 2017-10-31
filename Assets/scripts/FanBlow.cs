@@ -8,6 +8,7 @@ public class FanBlow : MonoBehaviour {
     public float BlowForce = 5f;
     private GameObject ball;
     private Vector3 normal;
+    private float t = 0;
 
 
     // Use this for initialization
@@ -30,12 +31,12 @@ public class FanBlow : MonoBehaviour {
         {
             col.transform.SetParent(null);
             Rigidbody rigidBody = ball.GetComponent<Rigidbody>();
-            rigidBody.velocity = normal * BlowForce;
+            rigidBody.velocity = normal * (BlowForce+t);
             rigidBody.angularVelocity = rigidBody.angularVelocity;
             Debug.Log("Blowy Blowy");
+                
 
-          
-
+           
         }
     }
 }

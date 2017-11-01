@@ -111,7 +111,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handinteractionL: {fileID: 0}
   handinteractionR: {fileID: 0}
-  teleporter: {fileID: 0}
+  glowMat: {fileID: 2100000, guid: bf9ce3460402fff4fbb419387c17e0dc, type: 2}
+  warningLight1: {fileID: 0}
+  warningLight2: {fileID: 0}
+  mainLight: {fileID: 0}
   controllerL: {fileID: 0}
   controllerR: {fileID: 0}
   initXPos: 0

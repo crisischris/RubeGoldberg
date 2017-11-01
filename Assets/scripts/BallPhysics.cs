@@ -6,9 +6,18 @@ public class BallPhysics : MonoBehaviour {
 
     public handInteraction handinteractionL;
     public handInteraction handinteractionR;
-    public Teleporter teleporter;
+    public Material glowMat;
+    public GameObject warningLight1;
+    public GameObject warningLight2;
+    public GameObject mainLight;
 
- 
+    public Material skyboxLight;
+    public Material skyboxDark;
+   
+
+
+
+
 
     public GameObject controllerL;
     public GameObject controllerR;
@@ -28,9 +37,10 @@ public class BallPhysics : MonoBehaviour {
     public Material mat1;
     public Material mat2;
 
-    private float curveWidth = .05f;
+    private float curveWidth = .025f;
+ 
 
-  
+
 
 
 
@@ -47,21 +57,19 @@ public class BallPhysics : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        //turn on trail
 
-        
-
-
+     
         //check Left controller grabbing status
         if (handinteractionL.isGrabbingBall == true)
           { 
             if(controllerL.transform.position.x < 1 && controllerL.transform.position.x > -1
             && controllerL.transform.position.z < 1 && controllerL.transform.position.z > -1)
             {
-                Debug.Log("you are out of bounds and grabbing something");
+                Debug.Log("you are in the playing feild");
                 GetComponent<Renderer>().material = mat2;
                 GetComponent<Rigidbody>().mass = 1;
                 GetComponent<Rigidbody>().drag = 0;
+                notWarning();
             }                         
         }
 
@@ -70,11 +78,13 @@ public class BallPhysics : MonoBehaviour {
             if(controllerL.transform.position.x > 1 || controllerL.transform.position.x < -1
              || controllerL.transform.position.z > 1 || controllerL.transform.position.z < -1)
             {
-                Debug.Log("you are  out of bounds and grabbing something");
+                Debug.Log("you are out of bounds holding the ball...you could be cheating......");
                 GetComponent<Renderer>().material = mat1;
                 GetComponent<Rigidbody>().mass = 1000;
                 GetComponent<Rigidbody>().drag = 1000;
+                warning();
             }             
+            
         }
 
         //check Left controller grabbing status
@@ -87,6 +97,7 @@ public class BallPhysics : MonoBehaviour {
                 GetComponent<Renderer>().material = mat2;
                 GetComponent<Rigidbody>().mass = 1;
                 GetComponent<Rigidbody>().drag = 0;
+                notWarning();
             }
         }
 
@@ -99,6 +110,7 @@ public class BallPhysics : MonoBehaviour {
                 GetComponent<Renderer>().material = mat1;
                 GetComponent<Rigidbody>().mass = 1000;
                 GetComponent<Rigidbody>().drag = 1000;
+                warning();
             }
         }
     }
@@ -110,6 +122,7 @@ public class BallPhysics : MonoBehaviour {
         {
             Debug.Log("ball hit the ground");
             Destroy(GetComponent<TrailRenderer>());
+            Destroy(GetComponent<Light>());
             gameObject.transform.position = new Vector3(initXPos, initYPos, initZPos);
             Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
             rigidBody.velocity = rigidBody.velocity * 0;
@@ -126,10 +139,10 @@ public class BallPhysics : MonoBehaviour {
 
             gameObject.AddComponent<TrailRenderer>();
             TrailRenderer trail = GetComponent<TrailRenderer>();
+            trail.material = glowMat;
             trail.startWidth = curveWidth;
-            trail.time = 2;
             trail.receiveShadows = false;
-            trail.material.SetColor("_TintColor", Color.red);
+            trail.time = 2;                    
 
         }
 
@@ -146,7 +159,28 @@ public class BallPhysics : MonoBehaviour {
 
         }
         */
-    }     
-        
+    }
+
+    public void warning()
+    {
+        mainLight.SetActive(false);
+        warningLight1.SetActive(true);
+        warningLight2.SetActive(true);
+        RenderSettings.fogDensity = .1f;
+        RenderSettings.skybox = skyboxDark;
+
+    }
+
+    public void notWarning()
+    {
+        mainLight.SetActive(true);
+        warningLight1.SetActive(false);
+        warningLight2.SetActive(false);
+        RenderSettings.fogDensity = .025f;
+        RenderSettings.skybox = skyboxLight;
+
+    }
+
+
 
 }

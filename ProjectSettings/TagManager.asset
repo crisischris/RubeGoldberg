@@ -15,6 +15,8 @@ TagManager:
   - Structure
   - Deleter
   - Portal
+  - mainLight
+  - warningLight
   layers:
   - Default
   - TransparentFX

@@ -11,15 +11,17 @@ public class handInteraction : MonoBehaviour {
 
     public GameObject controllerModel;
     public GameObject[] objectsToDelete;
+  
+ 
 
 
     public float posXatThrow;
     public float posYatThrow;
     public float posZatThrow;
 
-    private int i = 0;
-
+  
     public bool isGrabbingBall = false;
+  
 
     //Swipe
 
@@ -41,7 +43,7 @@ public class handInteraction : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        device = SteamVR_Controller.Input((int)trackedObj.index);
+        device = SteamVR_Controller.Input((int)trackedObj.index);        
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
         {
             //SteamVR_LoadLevel.Begin("Scene1");
@@ -205,15 +207,15 @@ public class handInteraction : MonoBehaviour {
 
     void ThrowObject(Collider col)
     {       
-
+      
         col.transform.SetParent(null);
         Rigidbody rigidBody = col.GetComponent<Rigidbody>();
         rigidBody.isKinematic = false;
         rigidBody.velocity = device.velocity * throwForce;
-        rigidBody.angularVelocity = device.angularVelocity;
+        rigidBody.angularVelocity = device.angularVelocity;        
         isGrabbingBall = false;
-
-
+         
+        
 
 
         //  Debug.Log("you have released the trigger");

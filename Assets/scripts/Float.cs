@@ -23,7 +23,7 @@ public class Float : MonoBehaviour
         // occilate the Y position
       
 
-        transform.position = new Vector3(transform.position.x, (Height) + (Mathf.Sin(Time.time)/distance), transform.position.z);
+        transform.position = new Vector3(transform.position.x + (Mathf.Sin(Time.time) / distance), Height, transform.position.z);
        
 
   

@@ -12,7 +12,7 @@ OcclusionCullingData:
     sizeRenderers: 1
     indexPortals: 0
     sizePortals: 0
-    scene: 82fdd8cfa2782ad4aac097e480539a49
+    scene: 1660ea38742ff9b4994282c7ce63d765
   m_StaticRenderers:
   - targetObject: 1827141061
     targetPrefab: 0

@@ -18,6 +18,7 @@ TagManager:
   - mainLight
   - warningLight
   - LastHit
+  - Restarter
   layers:
   - Default
   - TransparentFX

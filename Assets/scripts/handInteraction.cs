@@ -6,10 +6,11 @@ public class handInteraction : MonoBehaviour {
 
     public SteamVR_TrackedObject trackedObj;
     public SteamVR_Controller.Device device;
-    public float throwForce = 1.5f;
+    public float throwForce = 1f;
     public ushort pulesStregnth = 3000;
 
     public GameObject controllerModel;
+    public GameObject controllerTextMenu;
     public GameObject[] objectsToDelete;
   
  
@@ -18,7 +19,6 @@ public class handInteraction : MonoBehaviour {
     public float posXatThrow;
     public float posYatThrow;
     public float posZatThrow;
-
   
     public bool isGrabbingBall = false;
   
@@ -32,6 +32,7 @@ public class handInteraction : MonoBehaviour {
     public bool hasSwipedLeft;
     public bool hasSwipedRight;
     public ObjectMenuManager objectMenuManager;
+    public BallPhysics ballPhysics;
 
 
 
@@ -46,7 +47,7 @@ public class handInteraction : MonoBehaviour {
         device = SteamVR_Controller.Input((int)trackedObj.index);        
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            //SteamVR_LoadLevel.Begin("Scene1");
+           
             touchLast = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x;
         }
 
@@ -131,11 +132,13 @@ public class handInteraction : MonoBehaviour {
             {
                 ThrowObject(col);
                 controllerModel.SetActive(true);
+                controllerTextMenu.SetActive(true);
             }
             else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
             {
                 GrabObjectBall(col);
                 controllerModel.SetActive(false);
+                controllerTextMenu.SetActive(false);
             }
         }
         if (col.gameObject.CompareTag("Structure"))
@@ -144,11 +147,13 @@ public class handInteraction : MonoBehaviour {
             {
                 dropObjectStructure(col);
                 controllerModel.SetActive(true);
+                controllerTextMenu.SetActive(true);
             }
             else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
             {
                 GrabObject(col);
                 controllerModel.SetActive(false);
+                controllerTextMenu.SetActive(false);
             }
 
         }
@@ -159,11 +164,13 @@ public class handInteraction : MonoBehaviour {
             {
                 dropObjectStructure(col);
                 controllerModel.SetActive(true);
+                controllerTextMenu.SetActive(true);
             }
             else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
             {
                 GrabObject(col);
                 controllerModel.SetActive(false);
+                controllerTextMenu.SetActive(false);
             }
         }
 
@@ -206,15 +213,16 @@ public class handInteraction : MonoBehaviour {
 
 
     void ThrowObject(Collider col)
-    {       
-      
-        col.transform.SetParent(null);
+    {
+
+        ballPhysics.sources[1].Play();
+        col.transform.SetParent(null);        
         Rigidbody rigidBody = col.GetComponent<Rigidbody>();
         rigidBody.isKinematic = false;
         rigidBody.velocity = device.velocity * throwForce;
         rigidBody.angularVelocity = device.angularVelocity;        
         isGrabbingBall = false;
-         
+               
         
 
 

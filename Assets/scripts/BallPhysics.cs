@@ -9,16 +9,15 @@ public class BallPhysics : MonoBehaviour {
     public Material glowMat;
     public GameObject warningLight1;
     public GameObject warningLight2;
-    public GameObject mainLight;
+    public GameObject destroyPoofObject;
+    public GameObject lastHitObject;
 
     public Material skyboxLight;
     public Material skyboxDark;
-   
+    public AudioClip ballClip;
 
-
-
-
-
+    public AudioSource[] sources;
+    
     public GameObject controllerL;
     public GameObject controllerR;
 
@@ -28,9 +27,9 @@ public class BallPhysics : MonoBehaviour {
     public float initYPos;
     public float initZPos;
 
-    public float xpos;
-    public float ypos;
-    public float zpos;
+    public float xposGround;
+    public float yposGround;
+    public float zposGround;
 
     public bool inPlayArea = true;
 
@@ -52,13 +51,14 @@ public class BallPhysics : MonoBehaviour {
         initZPos = gameObject.transform.position.z;
 
 
+
+
+
     }
 
     // Update is called once per frame
     void Update() {
 
-
-     
         //check Left controller grabbing status
         if (handinteractionL.isGrabbingBall == true)
           { 
@@ -69,7 +69,7 @@ public class BallPhysics : MonoBehaviour {
                 GetComponent<Renderer>().material = mat2;
                 GetComponent<Rigidbody>().mass = 1;
                 GetComponent<Rigidbody>().drag = 0;
-                notWarning();
+                notCheater();
             }                         
         }
 
@@ -78,11 +78,8 @@ public class BallPhysics : MonoBehaviour {
             if(controllerL.transform.position.x > 1 || controllerL.transform.position.x < -1
              || controllerL.transform.position.z > 1 || controllerL.transform.position.z < -1)
             {
-                Debug.Log("you are out of bounds holding the ball...you could be cheating......");
-                GetComponent<Renderer>().material = mat1;
-                GetComponent<Rigidbody>().mass = 1000;
-                GetComponent<Rigidbody>().drag = 1000;
-                warning();
+                Debug.Log("you are out of bounds holding the ball...you could be cheating......");                
+                Cheater();
             }             
             
         }
@@ -97,7 +94,7 @@ public class BallPhysics : MonoBehaviour {
                 GetComponent<Renderer>().material = mat2;
                 GetComponent<Rigidbody>().mass = 1;
                 GetComponent<Rigidbody>().drag = 0;
-                notWarning();
+                notCheater();
             }
         }
 
@@ -107,10 +104,7 @@ public class BallPhysics : MonoBehaviour {
              || controllerR.transform.position.z > 1 || controllerR.transform.position.z < -1)
             {
                 Debug.Log("you are  out of bounds and grabbing something");
-                GetComponent<Renderer>().material = mat1;
-                GetComponent<Rigidbody>().mass = 1000;
-                GetComponent<Rigidbody>().drag = 1000;
-                warning();
+                Cheater();                               
             }
         }
     }
@@ -120,17 +114,30 @@ public class BallPhysics : MonoBehaviour {
         //reset ball position
         if (col.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("ball hit the ground");
+            deleteLastHit();
+            xposGround = gameObject.transform.position.x;
+            yposGround = gameObject.transform.position.y;
+            zposGround = gameObject.transform.position.z;
+            poofHit();
+            sources[3].Play();
             Destroy(GetComponent<TrailRenderer>());
-            Destroy(GetComponent<Light>());
-            gameObject.transform.position = new Vector3(initXPos, initYPos, initZPos);
+            Destroy(GetComponent<Light>());    
+            makeLastHit();
+            gameObject.transform.position = new Vector3(initXPos, initYPos, initZPos);          
             Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
             rigidBody.velocity = rigidBody.velocity * 0;
             rigidBody.angularVelocity = rigidBody.angularVelocity * 0;
             GetComponent<Renderer>().material = mat2;
             GetComponent<Rigidbody>().mass = 1;
             GetComponent<Rigidbody>().drag = 0;
+        }
 
+        //bounceballSound
+
+        if (col.gameObject.CompareTag("Untagged"))
+        {
+
+            sources[0].Play();
 
         }
 
@@ -146,41 +153,59 @@ public class BallPhysics : MonoBehaviour {
 
         }
 
-        /*
-           if (col.gameObject.CompareTag("Interactive"))
-        {
-
-            gameObject.AddComponent<TrailRenderer>();
-            TrailRenderer trail = GetComponent<TrailRenderer>();
-            trail.startWidth = curveWidth;
-            trail.time = 2;
-            trail.receiveShadows = false;
-            trail.material.SetColor("_TintColor", Color.red);
-
-        }
-        */
+    }
+    
+    public void makeLastHit()
+    {
+        Object.Instantiate(lastHitObject, new Vector3(xposGround, yposGround, zposGround), Quaternion.Euler(-90,0,0));   
     }
 
-    public void warning()
+    public void deleteLastHit()
     {
-        mainLight.SetActive(false);
+        GameObject[] dels;
+        dels = GameObject.FindGameObjectsWithTag("LastHit");
+        for (int i = 0; i < dels.Length; i++)
+        {
+            Destroy(dels[i]);
+        }        
+    }
+
+    public void poofHit()
+    {
+        StartCoroutine(destroyPoof());
+    }
+
+    IEnumerator destroyPoof()
+    {
+        Object.Instantiate(destroyPoofObject, new Vector3(xposGround, yposGround, zposGround), Quaternion.identity);
+        yield return new WaitForSeconds(1f);
+        GameObject poofToDestroy = GameObject.Find("destroyPoof(Clone)");
+        Destroy(poofToDestroy);
+    }
+
+    public void Cheater()
+    {
+
+        Collider col = gameObject.GetComponent<Collider>();
+        col.enabled = false;
         warningLight1.SetActive(true);
         warningLight2.SetActive(true);
-        RenderSettings.fogDensity = .1f;
+        RenderSettings.fogDensity = .25f;
         RenderSettings.skybox = skyboxDark;
+       
 
     }
 
-    public void notWarning()
+    public void notCheater()
     {
-        mainLight.SetActive(true);
+
+        Collider col = gameObject.GetComponent<Collider>();
+        col.enabled = true;        
         warningLight1.SetActive(false);
         warningLight2.SetActive(false);
         RenderSettings.fogDensity = .025f;
         RenderSettings.skybox = skyboxLight;
 
     }
-
-
 
 }

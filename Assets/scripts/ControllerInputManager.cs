@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerInputManager : MonoBehaviour {
+public class ControllerInputManager : MonoBehaviour
+{
 
 
     public SteamVR_TrackedObject trackedObj;
@@ -19,10 +20,6 @@ public class ControllerInputManager : MonoBehaviour {
     public LayerMask boundsMask;
     public float Height = 1f; // specific to teleportAimerObject height;
 
-    
-
-
-
     // Use this for initialization
     void Start()
     {
@@ -35,10 +32,10 @@ public class ControllerInputManager : MonoBehaviour {
     {
 
         device = SteamVR_Controller.Input((int)trackedObj.index);
-       
+
         if (device.GetPress(SteamVR_Controller.ButtonMask.Touchpad))
         {
-         //   Debug.Log("pressing down");
+            //   Debug.Log("pressing down");
 
             laser.gameObject.SetActive(true);
             teleporterAimerObject.SetActive(true);
@@ -46,56 +43,48 @@ public class ControllerInputManager : MonoBehaviour {
             laser.SetPosition(0, gameObject.transform.position);
             RaycastHit hit;
 
-           
-
-
             // create bounds raycast condition // 
-
 
             if (Physics.Raycast(transform.position, transform.forward, out hit, 15, laserMask))
             {
-           //     Debug.Log(hit.point);
+                //     Debug.Log(hit.point);
                 teleportLocation = hit.point;
-                laser.SetPosition(1, teleportLocation);
+                laser.SetPosition(1, hit.point);
                 teleporterAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + Height, teleportLocation.z);
-
-                
             }
 
             else
             {
                 teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
+
+
                 RaycastHit groundRay;
 
                 if (Physics.Raycast(teleportLocation, -Vector3.up, out groundRay, 17, laserMask))
                 {
                     teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, groundRay.point.y, transform.forward.z * 15 + transform.position.z);
-
-
-
                 }
 
                 laser.SetPosition(1, transform.forward * 15 + transform.position);
                 teleporterAimerObject.transform.position = teleportLocation + new Vector3(0, Height, 0);
 
-
             }
         }
 
+    
 
-
+        
         if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
-        {
-            laser.gameObject.SetActive(false);
-           teleporterAimerObject.SetActive(false);
-            player.transform.position = teleportLocation;
-            
+            {
+                laser.gameObject.SetActive(false);
+                teleporterAimerObject.SetActive(false);
+                player.transform.position = teleportLocation;
 
+
+            }
         }
     }
 
 
-
-}
 
 

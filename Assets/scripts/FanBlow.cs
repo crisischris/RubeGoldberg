@@ -29,6 +29,7 @@ public class FanBlow : MonoBehaviour {
         //Blow Ball with wind
         if (col.gameObject.CompareTag("Throwable"))
         {
+            gameObject.GetComponent<AudioSource>().Play();
             col.transform.SetParent(null);
             Rigidbody rigidBody = ball.GetComponent<Rigidbody>();
             rigidBody.velocity = normal * (BlowForce+t);

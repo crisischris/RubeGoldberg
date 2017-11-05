@@ -5,7 +5,7 @@ using UnityEngine;
 public class Paddle : MonoBehaviour
 {
 
-    private float hitForce = 10f;
+    private float hitForce = 15f;
     private GameObject ball;
 
 
@@ -25,14 +25,16 @@ public class Paddle : MonoBehaviour
     void OnCollisionEnter(Collision col)
     {
 
-        //bounce ball 
+        //hit ball 
         if (col.gameObject.CompareTag("Throwable"))
         {
+            gameObject.GetComponent<AudioSource>().Play();
             col.transform.SetParent(null);
-            Rigidbody rigidBody = ball.GetComponent<Rigidbody>();
-            rigidBody.velocity = rigidBody.velocity * hitForce;
-            rigidBody.angularVelocity = rigidBody.angularVelocity;
+            Rigidbody rigidBodyBall = ball.GetComponent<Rigidbody>();
+            rigidBodyBall.velocity = transform.up * hitForce;
+            rigidBodyBall.angularVelocity = rigidBodyBall.angularVelocity;
             Debug.Log("Hit Hit!");
+            
         }
     }
 }

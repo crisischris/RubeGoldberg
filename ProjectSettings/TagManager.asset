@@ -17,6 +17,7 @@ TagManager:
   - Portal
   - mainLight
   - warningLight
+  - LastHit
   layers:
   - Default
   - TransparentFX

@@ -48,15 +48,16 @@ public class ObjectMenuManager : MonoBehaviour {
     public void SpawnCurrentObject()
     {
         clone = Instantiate(objectPrebabList[currentObject], objectList[currentObject].transform.position, objectList[currentObject].transform.rotation);
+        clone.GetComponent<AudioSource>().Play();
         clone.tag = "Structure";
         clone.AddComponent<BoxCollider>();
         clone.AddComponent<Rigidbody>();
         Rigidbody rb = clone.GetComponent<Rigidbody>();
         rb.mass = 10;
 
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
-       // loadLevel.Trigger();
+      
     }
 
     public void showNone()

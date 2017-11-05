@@ -28,10 +28,22 @@ public class Collectable : MonoBehaviour {
         if (col.gameObject.CompareTag("Throwable"))
         {            
             scoreManagerScript.collected();
-            Destroy(gameObject);
-            Debug.Log("collected point");
+            StartCoroutine(playSound());
+            //Debug.Log("collected point");
         }
     }
 
-   
+
+    IEnumerator playSound()
+    {
+        Collider col = gameObject.GetComponent<Collider>();
+        col.enabled = false;
+        Renderer rend = gameObject.GetComponent<Renderer>();
+        rend.enabled = false;
+        gameObject.GetComponent<AudioSource>().Play();
+        yield return new WaitForSeconds(1.25f);
+        Destroy(gameObject);
+    }
+
+
 }

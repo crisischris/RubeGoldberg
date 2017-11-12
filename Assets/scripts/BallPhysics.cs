@@ -114,15 +114,14 @@ public class BallPhysics : MonoBehaviour {
         //reset ball position
         if (col.gameObject.CompareTag("Ground"))
         {
-            deleteLastHit();
             xposGround = gameObject.transform.position.x;
             yposGround = gameObject.transform.position.y;
             zposGround = gameObject.transform.position.z;
             poofHit();
+            makeLastHit();
             sources[3].Play();
             Destroy(GetComponent<TrailRenderer>());
-            Destroy(GetComponent<Light>());    
-            makeLastHit();
+            Destroy(GetComponent<Light>());                
             gameObject.transform.position = new Vector3(initXPos, initYPos, initZPos);          
             Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
             rigidBody.velocity = rigidBody.velocity * 0;
@@ -157,10 +156,12 @@ public class BallPhysics : MonoBehaviour {
     
     public void makeLastHit()
     {
-        Object.Instantiate(lastHitObject, new Vector3(xposGround, yposGround, zposGround), Quaternion.Euler(-90,0,0));   
+        lastHitObject.transform.position = new Vector3(xposGround, 0, zposGround);
+        Debug.Log(" ball position @ explode = " + "xpos" +  xposGround + "ypos" + yposGround + "zpos" + zposGround);
+
     }
 
-    public void deleteLastHit()
+    /*public void deleteLastHit()
     {
         GameObject[] dels;
         dels = GameObject.FindGameObjectsWithTag("LastHit");
@@ -169,6 +170,7 @@ public class BallPhysics : MonoBehaviour {
             Destroy(dels[i]);
         }        
     }
+    */
 
     public void poofHit()
     {

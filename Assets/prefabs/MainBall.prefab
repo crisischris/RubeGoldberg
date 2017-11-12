@@ -440,8 +440,7 @@ MonoBehaviour:
   warningLight2: {fileID: 0}
   destroyPoofObject: {fileID: 1875129479191674, guid: b3bfbc9479576074285ec531e89a1afd,
     type: 2}
-  lastHitObject: {fileID: 1305839305202956, guid: dfdb75da7dbca1545bf5703eb50a294b,
-    type: 2}
+  lastHitObject: {fileID: 0}
   skyboxLight: {fileID: 2100000, guid: 39a310d5b0f583f40b2a81fc5659e78d, type: 2}
   skyboxDark: {fileID: 2100000, guid: 44c2d83ad090051429385382aaed243b, type: 2}
   ballClip: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
